@@ -36,7 +36,15 @@ public class Uniform implements Distribution {
     }
 
     @Override
-    public synchronized double calculateServiceTime() {
-        return 0;
+    public synchronized double calculateServiceTime(double probability) {
+        try {
+            lock.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        double serviceTime;
+        serviceTime = a + (b - a) * probability;
+        lock.notifyAll();
+        return serviceTime;
     }
 }

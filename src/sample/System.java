@@ -28,7 +28,7 @@ public class System {
     private Gamma gamma2;
     private Uniform uniform;
     private Queue<Job> waitingQueue;
-    private int interarrivalTime;
+    private int interarrivalTime = 30;
 
     public System() {
 
@@ -72,6 +72,14 @@ public class System {
 
     public double calculateProbTwoServersAvailable() {
         return 0;
+    }
+
+    public void addToWaitingQueue(Job job) {
+        this.waitingQueue.add(job);
+    }
+
+    public void dispatchFromQueue() {
+        this.waitingQueue.remove();
     }
 
 

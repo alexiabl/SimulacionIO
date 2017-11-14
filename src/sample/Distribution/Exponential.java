@@ -7,27 +7,35 @@ public class Exponential implements Distribution {
 
     private static Object lock = new Object();
 
-    private double nu;
+    private double rate;
 
     public Exponential() {
 
     }
 
     public Exponential(double nu) {
-        this.nu = nu;
+        this.rate = nu;
+    }
+
+    public synchronized double getNu() {
+        return rate;
+    }
+
+    public synchronized void setNu(double nu) {
+        this.rate = nu;
     }
 
     @Override
-    public synchronized double calculateServiceTime() {
-        return 0;
-    }
-
-    public double getNu() {
-        return nu;
-    }
-
-    public void setNu(double nu) {
-        this.nu = nu;
+    public synchronized double calculateServiceTime(double probability) {
+        try {
+            lock.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        double serviceTime;
+        serviceTime = (-1 / rate) * Math.log(1 - probability);
+        lock.notifyAll();
+        return serviceTime;
     }
 
 }
